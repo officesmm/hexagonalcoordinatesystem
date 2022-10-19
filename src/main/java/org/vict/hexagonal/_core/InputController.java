@@ -1,10 +1,12 @@
 package org.vict.hexagonal._core;
 
 import org.vict.hexagonal.model.coordinate.Vector2;
+import org.vict.hexagonal.model.playerinfo.Placement;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.List;
 
 public class InputController {
     BufferedReader br;
@@ -34,6 +36,15 @@ public class InputController {
                 System.out.println("Invalid Direction");
                 return RequestDirection();
         }
-
     }
+
+    public int GetPlacement(List<Placement> placementList) {
+        if (placementList.size() == 0) {
+            return 1;
+        } else {
+            return GetPlacement(placementList);
+        }
+    }
+
+
 }
