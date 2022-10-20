@@ -10,16 +10,17 @@ import org.vict.hexagonal.model.playerinfo.Placement;
 import org.vict.hexagonal.view.BoardView;
 
 public class Game {
-    Board board;
-    BoardView boardView;
     List<Placement> boardItems = new ArrayList<Placement>();
 
+    BoardController boardController;
     InputController input = new InputController();
 
     public void NewGame() {
-        board = new Board(10, 10);
+        Board board = new Board(10, 10);
+        BoardView boardView = new BoardView();
         TEST_INPUT();
-        boardView = new BoardView(board);
+
+        boardController = new BoardController(board,boardView);
     }
 
     // test input are adding dummy data for component testing
@@ -31,7 +32,7 @@ public class Game {
 
     public void Start() {
         rearrange();
-        boardView.display(boardItems);
+
         for (int i = 0; i < 3; i++) {
             try {
                 Vector2.Direction direction = input.RequestDirection();
@@ -40,7 +41,7 @@ public class Game {
                 throw new RuntimeException(e);
             }
             rearrange();
-            boardView.display(boardItems);
+            boardController.boardView.display(boardController.board);
         }
 
     }

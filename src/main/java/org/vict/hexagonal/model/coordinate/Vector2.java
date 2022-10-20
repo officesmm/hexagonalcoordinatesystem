@@ -1,5 +1,14 @@
 package org.vict.hexagonal.model.coordinate;
 
+import org.vict.hexagonal.model.other.Board;
+import org.vict.hexagonal.model.playerinfo.Placement;
+
+import java.util.ArrayList;
+import java.util.Dictionary;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 // in this Hexagonal Coordinate we will use "odd-r" for display.
 // this board is starting from (0,0)
 public class Vector2 {
@@ -15,6 +24,10 @@ public class Vector2 {
         SouthWest
     }
 
+    final Direction[] directions = {Direction.East, Direction.NorthEast, Direction.SouthEast,
+            Direction.West, Direction.NorthWest, Direction.SouthEast};
+
+
     public Vector2(int x, int y) {
         this.x = x;
         this.y = y;
@@ -24,7 +37,7 @@ public class Vector2 {
     public static Vector2 moveDirection(Vector2 vector2, Direction direction) {
         Vector2 newPosition = vector2;
 
-        if (vector2.y % 2 == 0){
+        if (vector2.y % 2 == 0) {
             switch (direction) {
                 case East:
                     newPosition.x++;
@@ -47,7 +60,7 @@ public class Vector2 {
                     newPosition.y++;
                     break;
             }
-        }else{
+        } else {
             switch (direction) {
                 case East:
                     newPosition.x++;
@@ -81,7 +94,16 @@ public class Vector2 {
     void collision() {
     }
 
-    void borderInfo() {
+    void borderInfo(Board board, Vector2 position) {
+        List<Border> boundary = new ArrayList<Border>();
+        for (int i = 0; i < directions.length; i++) {
+            Vector2 newPosition = moveDirection(position, directions[i]);
+            if (!board.isInBoard(newPosition.x, newPosition.y)) {
+                boundary.add(new Border(newPosition, directions[i], Border.BorderInfo.OutOfBoundary, null));
+            } else {
+
+            }
+        }
     }
 
     void explosion() {
