@@ -1,6 +1,6 @@
 package org.vict.hexagonal.model.playerinfo;
 
-import org.vict.hexagonal.model.coordinate.Vector2;
+import org.vict.hexagonal.common.Vector2;
 
 // type of placement and cards are out of this project scope
 public class Placement {

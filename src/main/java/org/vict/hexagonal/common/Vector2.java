@@ -1,13 +1,4 @@
-package org.vict.hexagonal.model.coordinate;
-
-import org.vict.hexagonal.model.other.Board;
-import org.vict.hexagonal.model.playerinfo.Placement;
-
-import java.util.ArrayList;
-import java.util.Dictionary;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+package org.vict.hexagonal.common;
 
 // in this Hexagonal Coordinate we will use "odd-r" for display.
 // this board is starting from (0,0)
@@ -24,7 +15,7 @@ public class Vector2 {
         SouthWest
     }
 
-    final Direction[] directions = {Direction.East, Direction.NorthEast, Direction.SouthEast,
+    public static final Direction[] DIRECTION_LIST = {Direction.East, Direction.NorthEast, Direction.SouthEast,
             Direction.West, Direction.NorthWest, Direction.SouthEast};
 
 
@@ -92,21 +83,6 @@ public class Vector2 {
     }
 
     void collision() {
-    }
-
-    void borderInfo(Board board, Vector2 position) {
-        List<Border> boundary = new ArrayList<Border>();
-        for (int i = 0; i < directions.length; i++) {
-            Vector2 newPosition = moveDirection(position, directions[i]);
-            if (!board.isInBoard(newPosition.x, newPosition.y)) {
-                boundary.add(new Border(newPosition, directions[i], Border.BorderInfo.OutOfBoundary, null));
-            } else {
-
-            }
-        }
-    }
-
-    void explosion() {
     }
 
     void distance(Vector2 pos1, Vector2 pos2) {

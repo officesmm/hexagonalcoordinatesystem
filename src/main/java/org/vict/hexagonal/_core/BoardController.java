@@ -18,4 +18,6 @@ public class BoardController {
     public void BoardDisplay(List<Placement> boardItems){
         boardView.display(board, boardItems);
     }
+
+
 }

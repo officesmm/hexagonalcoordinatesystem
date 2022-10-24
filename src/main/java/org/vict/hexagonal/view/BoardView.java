@@ -2,7 +2,7 @@ package org.vict.hexagonal.view;
 
 import java.util.List;
 
-import org.vict.hexagonal.model.coordinate.Vector2;
+import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
 

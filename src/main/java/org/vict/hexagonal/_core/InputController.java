@@ -1,6 +1,6 @@
 package org.vict.hexagonal._core;
 
-import org.vict.hexagonal.model.coordinate.Vector2;
+import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
 import java.io.BufferedReader;

@@ -1,8 +1,9 @@
-package org.vict.hexagonal.model.coordinate;
+package org.vict.hexagonal.common;
 
+import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
-public class Border {
+public class Border implements Comparable {
 
     public enum BorderInfo{
         OutOfBoundary,
@@ -22,4 +23,16 @@ public class Border {
         this.placement = placement;
     }
 
+    public float priority;
+    @Override
+    public int compareTo(Object o) {
+        Border other = (Border) o;
+        if (this.priority < other.priority) {
+            return -1;
+        } else if (this.priority > other.priority) {
+            return 1;
+        } else {
+            return 0;
+        }
+    }
 }
