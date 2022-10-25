@@ -3,7 +3,7 @@ package org.vict.hexagonal.model.coordinate;
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
-public class BorderNode implements Comparable {
+public class BorderNode{
 
     public enum BorderInfo{
         OutOfBoundary,
@@ -24,16 +24,16 @@ public class BorderNode implements Comparable {
         this.placement = placement;
     }
 
-    public float priority;
-    @Override
-    public int compareTo(Object o) {
-        BorderNode other = (BorderNode) o;
-        if (this.priority < other.priority) {
-            return -1;
-        } else if (this.priority > other.priority) {
-            return 1;
-        } else {
-            return 0;
-        }
-    }
+//    public float priority;
+//    @Override
+//    public int compareTo(Object o) {
+//        BorderNode other = (BorderNode) o;
+//        if (this.priority < other.priority) {
+//            return -1;
+//        } else if (this.priority > other.priority) {
+//            return 1;
+//        } else {
+//            return 0;
+//        }
+//    }
 }
