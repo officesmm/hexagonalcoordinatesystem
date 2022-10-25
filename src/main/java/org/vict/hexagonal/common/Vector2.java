@@ -16,7 +16,7 @@ public class Vector2 {
     }
 
     public static final Direction[] DIRECTION_LIST = {Direction.East, Direction.NorthEast, Direction.SouthEast,
-            Direction.West, Direction.NorthWest, Direction.SouthEast};
+            Direction.West, Direction.NorthWest, Direction.SouthWest};
 
 
     public Vector2(int x, int y) {
@@ -25,10 +25,10 @@ public class Vector2 {
     }
 
     // this move direction is only for "odd-r" display
-    public static Vector2 moveDirection(Vector2 vector2, Direction direction) {
-        Vector2 newPosition = vector2;
+    public static Vector2 moveDirection(Vector2 position, Direction direction) {
+        Vector2 newPosition = new Vector2(position.x, position.y);
 
-        if (vector2.y % 2 == 0) {
+        if (newPosition.y % 2 == 0) {
             switch (direction) {
                 case East:
                     newPosition.x++;
