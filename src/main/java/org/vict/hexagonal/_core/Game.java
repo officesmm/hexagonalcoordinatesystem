@@ -12,19 +12,19 @@ import java.util.List;
 public class Game {
 
     BoardController boardController;
-    PlacementController placementController;
+    PlacementController2 placementController;
     InputController input;
 
     public void newGame() {
         input = new InputController();
         boardController = new BoardController().createBoard(10, 10);
-        placementController = new PlacementController();
+        placementController = new PlacementController2();
 
         placementController = TEST_INPUT(placementController);
     }
 
     // test input are adding dummy data for unit testing
-    static PlacementController TEST_INPUT(PlacementController placementController) {
+    static PlacementController2 TEST_INPUT(PlacementController2 placementController) {
         placementController.addingPlacement(new Placement(new Vector2(2, 2)));
         placementController.addingPlacement(new Placement(new Vector2(6, 1)));
         placementController.addingPlacement(new Placement(new Vector2(4, 3)));
@@ -32,7 +32,7 @@ public class Game {
     }
 
     public void start() {
-        placementController.rearrange();
+//        placementController.rearrange();
 
 //        for (int i = 0; i < 3; i++) {
 //            try {
