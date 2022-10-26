@@ -9,59 +9,43 @@ import java.util.List;
 
 public class PlacementController {
 
-    private List<Placement> placementList;
-
-//    HashMap<String, Placement> placementList = new HashMap<String, Placement>();
+    HashMap<String, Placement> placementList;
 
     public PlacementController() {
-        placementList = new ArrayList<>();
-//        placementList = new HashMap<String, Placement>();
+        placementList = new HashMap<String, Placement>();
     }
 
     public void addingPlacement(Placement placement) {
-//        String key = Integer.toString(placement.position.x) + Integer.toString(placement.position.y);
-//        placementList.put(key, placement);
-        placementList.add(placement);
+        String key = Integer.toString(placement.position.x) + Integer.toString(placement.position.y);
+        placementList.put(key, placement);
     }
 
     public Placement getIPlacement(int i) {
         return placementList.get(i);
     }
 
+    public List<Placement> getPlacementList(){
+        List<Placement> list = new ArrayList<Placement>(placementList.values());
+        return list;
+    }
+
     public Placement findByPosition(Vector2 position) {
-        for (int i = 0; i < placementList.size(); i++) {
-            if (Vector2.collision(placementList.get(i).position, position)) {
-                return placementList.get(i);
-            }
-        }
-        return null;
+        String key = Integer.toString(position.x) + Integer.toString(position.y);
+        return placementList.get(key);
     }
 
-    // compare to the Card Module of Side Mover Game top-left corner of this coordinate system is (0,0) whereas Side Mover Game save as bottom-left as (1,1)
-    public void rearrange() {
-        int n = placementList.size();
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (placementList.get(j).position.x > placementList.get(j + 1).position.x) {
-                    swapping(j);
-                }
-            }
-        }
-        for (int i = 0; i < n - 1; i++) {
-            for (int j = 0; j < n - i - 1; j++) {
-                if (placementList.get(j).position.y > placementList.get(j + 1).position.y) {
-                    swapping(j);
-                }
-            }
-        }
+    // everytime a placement moved, the position and key will no longer the same so this function will fix the problem
+    public void updateByPlacementKey(String key){
+        Placement newPlacement = placementList.get(key);
+        placementList.remove(key);
+        String newKey = Integer.toString(newPlacement.position.x) + Integer.toString(newPlacement.position.y);
+        placementList.put(newKey,newPlacement);
     }
 
-    private void swapping(int j) {
-        Placement indexJ = placementList.get(j);
-        Placement indexJ1 = placementList.get(j + 1);
-        placementList.remove((j + 1));
-        placementList.remove(j);
-        placementList.add(j, indexJ1);
-        placementList.add((j + 1), indexJ);
-    }
+//    public void rearrangeAll() {
+//
+//        for (HashMap.Entry<String, Placement> ele : placementList.entrySet()) {
+//
+//        }
+//    }
 }

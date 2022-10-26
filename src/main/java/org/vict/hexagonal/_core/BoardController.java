@@ -1,15 +1,15 @@
 package org.vict.hexagonal._core;
 
+import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
 import org.vict.hexagonal.view.BoardView;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class BoardController {
-    Board board;
-    BoardView boardView;
+    private Board board;
+    private BoardView boardView;
 
     public BoardController() {
         this.boardView = new BoardView();
@@ -20,9 +20,12 @@ public class BoardController {
         return this;
     }
 
-    public void boardDisplay(List<Placement> boardItems) {
-        boardView.display(board, boardItems);
+    public boolean positionInBoard(Vector2 position) {
+        return board.isInBoard(position.x, position.y);
     }
 
+    public void boardDisplay(HashMap<String, Placement> boardItems) {
+        boardView.display(board, boardItems);
+    }
 
 }

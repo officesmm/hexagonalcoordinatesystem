@@ -2,12 +2,9 @@ package org.vict.hexagonal._core;
 
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.coordinate.BorderNode;
-import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
-import org.vict.hexagonal.view.BoardView;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 
 public class Game {
 
@@ -32,89 +29,74 @@ public class Game {
     }
 
     public void start() {
-        placementController.rearrange();
+        while (true) {
+            boardController.boardDisplay(placementController.placementList);
 
-//        for (int i = 0; i < 3; i++) {
-//            try {
-//                Vector2.Direction direction = input.RequestDirection();
-//                Vector2.moveDirection(placementController.getIPlacement(0).position, direction);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//            placementController.rearrange();
-//            boardController.boardView.display(boardController.board);
-//        }
-
-//        List<BorderNode> a = borderInfo(new Vector2(3, 2));
-//        System.out.println(a.size());
-
-        List<BorderNode> b = explosion(new Vector2(3, 2), 3);
-        System.out.println(b.size());
-
-        for (int i = 0; i < b.size(); i++) {
-            System.out.println(i + " of new Pos :: " + b.get(i).position.x + "," + b.get(i).position.y);
+            String selectedPlacementKey = input.requestPlacementKey(placementController.placementList);
+            move(selectedPlacementKey);
         }
     }
 
-    public void move() {
+    void move(String selectedPlacementKey) {
+        Vector2.Direction direction = input.requestDirection();
+        Vector2 newPosition = Vector2.moveDirection(placementController.placementList.get(selectedPlacementKey).position, direction);
 
+        String newPositionAsKey = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
+        System.out.println("new Position " + newPosition.x + ", " + newPosition.y);
+        if (placementController.placementList.get(newPositionAsKey) != null) {
+            System.out.println("Unable to move");
+        } else {
+            placementController.placementList.get(selectedPlacementKey).position = newPosition;
+            placementController.updateByPlacementKey(selectedPlacementKey);
+        }
     }
 
+    private HashMap<String, BorderNode> movablePosition(Vector2 position, int layer) {
+        HashMap<String, BorderNode> closestFreePositionList = new HashMap<>();
+        closestFreePositionList.putAll(borderInfo(position));
+        for (HashMap.Entry<String, BorderNode> ele : closestFreePositionList.entrySet()) {
+            if (ele.getValue().borderInfo != BorderNode.BorderInfo.FreeSpace) {
+                closestFreePositionList.remove(ele.getKey());
+            }
+        }
+        return closestFreePositionList;
+    }
 
-    private List<BorderNode> explosion(Vector2 position, int layer) {
-        List<BorderNode> boundary = new ArrayList<BorderNode>();
+    private HashMap<String, BorderNode> explosion(Vector2 position, int layer) {
+        HashMap<String, BorderNode> boundary = new HashMap<>();
         int layerCounter = layer;
         boundary = borderInfo(position);
         layerCounter--;
         while (layerCounter > 0) {
-            List<BorderNode> anotherBoundary = new ArrayList<BorderNode>();
-            for (int i = 0; i < boundary.size(); i++) {
-                List<BorderNode> inner = borderInfo(boundary.get(i).position);
-                anotherBoundary.addAll(inner);
+            HashMap<String, BorderNode> anotherBoundary = new HashMap<>();
+            for (HashMap.Entry<String, BorderNode> ele : boundary.entrySet()) {
+                anotherBoundary.putAll(borderInfo(ele.getValue().position));
             }
-            boundary.addAll(anotherBoundary);
-            boundary = cleanUp(boundary);
+            boundary.putAll(anotherBoundary);
             layerCounter--;
         }
-        boundary = removingMainPos(boundary, position);
+        String key = Integer.toString(position.x) + Integer.toString(position.y);
+        boundary.remove(key);
         return boundary;
     }
 
-    private List<BorderNode> borderInfo(Vector2 position) {
-        List<BorderNode> boundary = new ArrayList<BorderNode>();
+    private HashMap<String, BorderNode> borderInfo(Vector2 position) {
+        HashMap<String, BorderNode> boundary = new HashMap<>();
         for (int i = 0; i < Vector2.DIRECTION_LIST.length; i++) {
             Vector2 newPosition = Vector2.moveDirection(position, Vector2.DIRECTION_LIST[i]);
-            if (!boardController.board.isInBoard(newPosition.x, newPosition.y)) {
-                boundary.add(new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.OutOfBoundary, null));
+            String key = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
+            if (!boardController.positionInBoard(newPosition)) {
+                boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.OutOfBoundary, null));
             } else {
                 Placement positionPlace = placementController.findByPosition(newPosition);
                 if (positionPlace != null) {
-                    boundary.add(new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.Placement, positionPlace));
+                    boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.Placement, positionPlace));
                 } else {
-                    boundary.add(new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.FreeSpace, null));
+                    boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.FreeSpace, null));
                 }
             }
         }
         return boundary;
     }
 
-    private List<BorderNode> cleanUp(List<BorderNode> borderNodes) {
-        for (int i = 0; i < borderNodes.size(); i++) {
-            for (int j = i + 1; j < borderNodes.size(); j++) {
-                if (Vector2.collision(borderNodes.get(i).position, borderNodes.get(j).position)) {
-                    borderNodes.remove(j);
-                }
-            }
-        }
-        return borderNodes;
-    }
-
-    private List<BorderNode> removingMainPos(List<BorderNode> borderNodes, Vector2 originalPosition) {
-        for (int i = 0; i < borderNodes.size(); i++) {
-            if (Vector2.collision(borderNodes.get(i).position, originalPosition)) {
-                borderNodes.remove(i);
-            }
-        }
-        return borderNodes;
-    }
 }
