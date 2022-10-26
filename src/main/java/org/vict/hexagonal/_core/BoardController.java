@@ -3,17 +3,16 @@ package org.vict.hexagonal._core;
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
-import org.vict.hexagonal.view.BoardView2;
+import org.vict.hexagonal.view.BoardView;
 
 import java.util.HashMap;
-import java.util.List;
 
 public class BoardController {
     private Board board;
-    private BoardView2 boardView;
+    private BoardView boardView;
 
     public BoardController() {
-        this.boardView = new BoardView2();
+        this.boardView = new BoardView();
     }
 
     public BoardController createBoard(int width, int height) {
@@ -28,6 +27,5 @@ public class BoardController {
     public void boardDisplay(HashMap<String, Placement> boardItems) {
         boardView.display(board, boardItems);
     }
-
 
 }

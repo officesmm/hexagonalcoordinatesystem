@@ -1,10 +1,9 @@
 package org.vict.hexagonal.view;
 
-import java.util.List;
-
-import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
+
+import java.util.HashMap;
 
 public class BoardView {
 
@@ -16,7 +15,7 @@ public class BoardView {
             }
             System.out.print("|");
             for (int j = 0; j < board.width; j++) {
-                System.out.print(" "+i+","+j+" ");
+                System.out.print(" " + i + "," + j + " ");
                 System.out.print("|");
             }
             System.out.println();
@@ -25,8 +24,7 @@ public class BoardView {
 
     // Compare to the Card Module of Side Mover Game, this project navigate top-left corner of this coordinate system is (0,0) whereas Side Mover Game save as bottom-left as (1,1)
     // the loop system changed, the Game. rearrange function changed
-    public void display(Board board, List<Placement> boardItem) {
-        int boardItemCounter = 0;
+    public void display(Board board, HashMap<String, Placement> boardItem) {
         boolean flagItemExist = true;
         for (int loopY = 0; loopY < board.height; loopY++) {
             if (loopY % 2 != 0) {
@@ -40,12 +38,9 @@ public class BoardView {
                     if (!flagItemExist) {
                         System.out.print(" . ");
                     } else {
-                        if (Vector2.collision(boardItem.get(boardItemCounter).position, new Vector2(loopX, loopY))) {
-                            System.out.print(" " + boardItem.get(boardItemCounter).symbol + " ");
-                            boardItemCounter++;
-                            if (boardItemCounter >= boardItem.size()) {
-                                flagItemExist = false;
-                            }
+                        String Key = Integer.toString(loopX) + Integer.toString(loopY);
+                        if (boardItem.get(Key) != null) {
+                            System.out.print(" " + boardItem.get(Key).symbol + " ");
                         } else {
                             System.out.print(" . ");
                         }

@@ -6,22 +6,22 @@ import org.vict.hexagonal.model.playerinfo.Placement;
 
 import java.util.HashMap;
 
-public class Game2 {
+public class Game {
 
     BoardController boardController;
-    PlacementController2 placementController;
+    PlacementController placementController;
     InputController input;
 
     public void newGame() {
         input = new InputController();
         boardController = new BoardController().createBoard(10, 10);
-        placementController = new PlacementController2();
+        placementController = new PlacementController();
 
         placementController = TEST_INPUT(placementController);
     }
 
     // test input are adding dummy data for unit testing
-    static PlacementController2 TEST_INPUT(PlacementController2 placementController) {
+    static PlacementController TEST_INPUT(PlacementController placementController) {
         placementController.addingPlacement(new Placement(new Vector2(2, 2)));
         placementController.addingPlacement(new Placement(new Vector2(6, 1)));
         placementController.addingPlacement(new Placement(new Vector2(4, 3)));
@@ -43,8 +43,6 @@ public class Game2 {
 
         String newPositionAsKey = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
         System.out.println("new Position " + newPosition.x + ", " + newPosition.y);
-        System.out.println("new Item " + placementController.placementList.get(newPositionAsKey));
-
         if (placementController.placementList.get(newPositionAsKey) != null) {
             System.out.println("Unable to move");
         } else {
