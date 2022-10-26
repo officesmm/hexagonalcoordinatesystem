@@ -23,8 +23,8 @@ public class BoardView {
         }
     }
 
-    // compare to the Card Module of Side Mover Game top-left corner of this coordinate system is (0,0) whereas Side Mover Game save as bottom-left as (1,1)
-    // the loop system changed, the Game.rearrange function changed
+    // Compare to the Card Module of Side Mover Game, this project navigate top-left corner of this coordinate system is (0,0) whereas Side Mover Game save as bottom-left as (1,1)
+    // the loop system changed, the Game. rearrange function changed
     public void display(Board board, List<Placement> boardItem) {
         int boardItemCounter = 0;
         boolean flagItemExist = true;

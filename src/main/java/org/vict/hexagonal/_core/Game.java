@@ -15,25 +15,23 @@ public class Game {
     PlacementController placementController;
     InputController input;
 
-    public void NewGame() {
-        Board board = new Board(10, 10);
-        BoardView boardView = new BoardView();
-
+    public void newGame() {
         input = new InputController();
-        boardController = new BoardController(board, boardView);
+        boardController = new BoardController().createBoard(10, 10);
         placementController = new PlacementController();
 
-        TEST_INPUT();
+        placementController = TEST_INPUT(placementController);
     }
 
-    // test input are adding dummy data for component testing
-    void TEST_INPUT() {
+    // test input are adding dummy data for unit testing
+    static PlacementController TEST_INPUT(PlacementController placementController) {
         placementController.addingPlacement(new Placement(new Vector2(2, 2)));
         placementController.addingPlacement(new Placement(new Vector2(6, 1)));
         placementController.addingPlacement(new Placement(new Vector2(4, 3)));
+        return placementController;
     }
 
-    public void Start() {
+    public void start() {
         placementController.rearrange();
 
 //        for (int i = 0; i < 3; i++) {
@@ -78,9 +76,10 @@ public class Game {
             boundary = cleanUp(boundary);
             layerCounter--;
         }
-        boundary = removingMainPos(boundary,position);
+        boundary = removingMainPos(boundary, position);
         return boundary;
     }
+
     private List<BorderNode> borderInfo(Vector2 position) {
         List<BorderNode> boundary = new ArrayList<BorderNode>();
         for (int i = 0; i < Vector2.DIRECTION_LIST.length; i++) {
@@ -109,6 +108,7 @@ public class Game {
         }
         return borderNodes;
     }
+
     private List<BorderNode> removingMainPos(List<BorderNode> borderNodes, Vector2 originalPosition) {
         for (int i = 0; i < borderNodes.size(); i++) {
             if (Vector2.collision(borderNodes.get(i).position, originalPosition)) {

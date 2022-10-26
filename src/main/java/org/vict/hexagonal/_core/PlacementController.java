@@ -4,17 +4,23 @@ import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 public class PlacementController {
 
     private List<Placement> placementList;
 
+//    HashMap<String, Placement> placementList = new HashMap<String, Placement>();
+
     public PlacementController() {
-        placementList = new ArrayList<Placement>();
+        placementList = new ArrayList<>();
+//        placementList = new HashMap<String, Placement>();
     }
 
     public void addingPlacement(Placement placement) {
+//        String key = Integer.toString(placement.position.x) + Integer.toString(placement.position.y);
+//        placementList.put(key, placement);
         placementList.add(placement);
     }
 
@@ -24,7 +30,7 @@ public class PlacementController {
 
     public Placement findByPosition(Vector2 position) {
         for (int i = 0; i < placementList.size(); i++) {
-            if(Vector2.collision(placementList.get(i).position, position)){
+            if (Vector2.collision(placementList.get(i).position, position)) {
                 return placementList.get(i);
             }
         }

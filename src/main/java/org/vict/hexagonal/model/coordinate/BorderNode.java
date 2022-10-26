@@ -24,16 +24,4 @@ public class BorderNode{
         this.placement = placement;
     }
 
-//    public float priority;
-//    @Override
-//    public int compareTo(Object o) {
-//        BorderNode other = (BorderNode) o;
-//        if (this.priority < other.priority) {
-//            return -1;
-//        } else if (this.priority > other.priority) {
-//            return 1;
-//        } else {
-//            return 0;
-//        }
-//    }
 }
