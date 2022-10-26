@@ -1,6 +1,7 @@
 package org.vict.hexagonal._core;
 
 import org.vict.hexagonal.common.Vector2;
+import org.vict.hexagonal.model.coordinate.BorderNode;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
 import java.util.ArrayList;
@@ -34,6 +35,19 @@ public class PlacementController2 {
         return placementList.get(key);
     }
 
+    public void updateByPlacementKey(String key){
+        Placement newPlacement = placementList.get(key);
+        placementList.remove(key);
+        String newKey = Integer.toString(newPlacement.position.x) + Integer.toString(newPlacement.position.y);
+        placementList.put(newKey,newPlacement);
+    }
+
+//    public void rearrangeAll() {
+//
+//        for (HashMap.Entry<String, Placement> ele : placementList.entrySet()) {
+//
+//        }
+//    }
     // compare to the Card Module of Side Mover Game top-left corner of this coordinate system is (0,0) whereas Side Mover Game save as bottom-left as (1,1)
 //    public void rearrange() {
 //        int n = placementList.size();

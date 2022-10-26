@@ -4,9 +4,7 @@ import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.coordinate.BorderNode;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 public class Game2 {
 
@@ -31,48 +29,34 @@ public class Game2 {
     }
 
     public void start() {
-        placementController.placementList.get("33");
-//        placementController.placementList.put("11",null);
+        while (true) {
+            boardController.boardDisplay(placementController.placementList);
 
-        if (placementController.placementList.get("11") == null) {
-            System.out.println("this is null");
-        }else{
-
+            String selectedPlacementKey = input.requestPlacementKey(placementController.placementList);
+            move(selectedPlacementKey);
         }
-//        List<Placement> list = new ArrayList<Placement>(placementController.placementList.values());
-//        boardController.boardView.display(boardController.board,list);
-//
-        Placement placement = input.requestPlacement(placementController.placementList);
-//        for (int i = 0; i < 3; i++) {
-//            Vector2.Direction direction = input.requestDirection();
-//            Vector2.moveDirection(placementController.getIPlacement(0).position, direction);
-//
-//            list = new ArrayList<Placement>(placementController.placementList.values());
-//            boardController.boardView.display(boardController.board,list);
-//        }
-
-//        List<BorderNode> a = borderInfo(new Vector2(3, 2));
-//        System.out.println(a.size());
-
-//        HashMap<String, BorderNode> b = explosion(new Vector2(3, 2), 3);
-//        System.out.println(b.size());
-//
-//        for (HashMap.Entry<String, BorderNode> ele :
-//                b.entrySet()) {
-////            System.out.println(ele.getKey() + " = " + ele.getValue());
-//        }
     }
 
-    public void move() {
+    void move(String selectedPlacementKey) {
+        Vector2.Direction direction = input.requestDirection();
+        Vector2 newPosition = Vector2.moveDirection(placementController.placementList.get(selectedPlacementKey).position, direction);
 
+        String newPositionAsKey = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
+        System.out.println("new Position " + newPosition.x + ", " + newPosition.y);
+        System.out.println("new Item " + placementController.placementList.get(newPositionAsKey));
+
+        if (placementController.placementList.get(newPositionAsKey) != null) {
+            System.out.println("Unable to move");
+        } else {
+            placementController.placementList.get(selectedPlacementKey).position = newPosition;
+            placementController.updateByPlacementKey(selectedPlacementKey);
+        }
     }
-
 
     private HashMap<String, BorderNode> movablePosition(Vector2 position, int layer) {
         HashMap<String, BorderNode> closestFreePositionList = new HashMap<>();
         closestFreePositionList.putAll(borderInfo(position));
-        for (HashMap.Entry<String, BorderNode> ele :
-                closestFreePositionList.entrySet()) {
+        for (HashMap.Entry<String, BorderNode> ele : closestFreePositionList.entrySet()) {
             if (ele.getValue().borderInfo != BorderNode.BorderInfo.FreeSpace) {
                 closestFreePositionList.remove(ele.getKey());
             }
@@ -87,8 +71,7 @@ public class Game2 {
         layerCounter--;
         while (layerCounter > 0) {
             HashMap<String, BorderNode> anotherBoundary = new HashMap<>();
-            for (HashMap.Entry<String, BorderNode> ele :
-                    boundary.entrySet()) {
+            for (HashMap.Entry<String, BorderNode> ele : boundary.entrySet()) {
                 anotherBoundary.putAll(borderInfo(ele.getValue().position));
             }
             boundary.putAll(anotherBoundary);
@@ -104,7 +87,7 @@ public class Game2 {
         for (int i = 0; i < Vector2.DIRECTION_LIST.length; i++) {
             Vector2 newPosition = Vector2.moveDirection(position, Vector2.DIRECTION_LIST[i]);
             String key = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
-            if (!boardController.board.isInBoard(newPosition.x, newPosition.y)) {
+            if (!boardController.positionInBoard(newPosition)) {
                 boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.OutOfBoundary, null));
             } else {
                 Placement positionPlace = placementController.findByPosition(newPosition);
