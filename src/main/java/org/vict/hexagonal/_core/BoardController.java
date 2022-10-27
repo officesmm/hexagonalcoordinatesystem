@@ -28,4 +28,7 @@ public class BoardController {
         boardView.display(board, boardItems);
     }
 
+    public void shootingBullet(Vector2 bulletPosition, Vector2.Direction bulletDirection, Placement hitPlacement) {
+        boardView.shootingBullet(bulletPosition, bulletDirection, hitPlacement);
+    }
 }

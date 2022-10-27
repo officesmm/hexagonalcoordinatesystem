@@ -15,11 +15,18 @@ public class InputController {
         br = new BufferedReader(new InputStreamReader(System.in));
     }
 
+    public enum Action {
+        Attack,
+        Move
+    }
+
+    Action[] actionArray = {Action.Attack, Action.Move};
+
     public Vector2.Direction requestDirection() {
         System.out.println("Enter Direction");
         String direction = "";
         try {
-            direction = br.readLine();
+            direction = br.readLine().trim().toUpperCase();
         } catch (IOException e) {
             System.out.println("Invalid Direction");
             return requestDirection();
@@ -41,6 +48,19 @@ public class InputController {
                 System.out.println("Invalid Direction");
                 return requestDirection();
         }
+    }
+
+    public Action requestAction() {
+        System.out.println("Enter Action 0 for Attack 1 for Move");
+        int actionType;
+        try {
+            String input = br.readLine();
+            actionType = Integer.parseInt(input);
+        } catch (IOException | NumberFormatException | ArrayIndexOutOfBoundsException e) {
+            System.out.println("Invalid Action");
+            return requestAction();
+        }
+        return actionArray[actionType];
     }
 
     public String requestPlacementKey(HashMap<String, Placement> placementList) {

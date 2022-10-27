@@ -1,5 +1,6 @@
 package org.vict.hexagonal.view;
 
+import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
@@ -38,7 +39,7 @@ public class BoardView {
                     if (!flagItemExist) {
                         System.out.print(" . ");
                     } else {
-                        String Key = Integer.toString(loopX) + Integer.toString(loopY);
+                        String Key = Vector2.KeyGenerator(new Vector2(loopX, loopY));
                         if (boardItem.get(Key) != null) {
                             System.out.print(" " + boardItem.get(Key).symbol + " ");
                         } else {
@@ -50,5 +51,14 @@ public class BoardView {
             }
             System.out.println();
         }
+    }
+
+    public void shootingBullet(Vector2 bulletPosition, Vector2.Direction bulletDirection, Placement hitPlacement) {
+        if (hitPlacement == null) {
+            System.out.println("A bullet is shooting to the xx direction and nothing hit");
+        } else {
+            System.out.println("A bullet is shooting to the xx direction and hit pp on yy");
+        }
+
     }
 }

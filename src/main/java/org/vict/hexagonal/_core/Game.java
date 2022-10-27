@@ -4,6 +4,10 @@ import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.coordinate.BorderNode;
 import org.vict.hexagonal.model.playerinfo.Placement;
 
+import javax.swing.text.View;
+
+import test.CREATIONAL;
+
 import java.util.HashMap;
 
 public class Game {
@@ -17,23 +21,21 @@ public class Game {
         boardController = new BoardController().createBoard(10, 10);
         placementController = new PlacementController();
 
-        placementController = TEST_INPUT(placementController);
+        placementController = CREATIONAL.CREATE_PLACEMENT(placementController);
     }
 
-    // test input are adding dummy data for unit testing
-    static PlacementController TEST_INPUT(PlacementController placementController) {
-        placementController.addingPlacement(new Placement(new Vector2(2, 2)));
-        placementController.addingPlacement(new Placement(new Vector2(6, 1)));
-        placementController.addingPlacement(new Placement(new Vector2(4, 3)));
-        return placementController;
-    }
 
     public void start() {
         while (true) {
             boardController.boardDisplay(placementController.placementList);
-
             String selectedPlacementKey = input.requestPlacementKey(placementController.placementList);
-            move(selectedPlacementKey);
+            // Action should be an interface with perform by Commend pattern
+            InputController.Action action = input.requestAction();
+            if (action == InputController.Action.Attack) {
+                shot(selectedPlacementKey);
+            } else if (action == InputController.Action.Move) {
+                move(selectedPlacementKey);
+            }
         }
     }
 
@@ -41,15 +43,43 @@ public class Game {
         Vector2.Direction direction = input.requestDirection();
         Vector2 newPosition = Vector2.moveDirection(placementController.placementList.get(selectedPlacementKey).position, direction);
 
-        String newPositionAsKey = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
         System.out.println("new Position " + newPosition.x + ", " + newPosition.y);
-        if (placementController.placementList.get(newPositionAsKey) != null) {
+        if (placementController.placementList.get(Vector2.KeyGenerator(newPosition)) != null) {
             System.out.println("Unable to move");
         } else {
             placementController.placementList.get(selectedPlacementKey).position = newPosition;
             placementController.updateByPlacementKey(selectedPlacementKey);
         }
     }
+
+    void shot(String selectedPlacementKey) {
+        Vector2.Direction direction = input.requestDirection();
+        Placement placementAttacker = placementController.placementList.get(selectedPlacementKey);
+        Vector2 attackerPosition = new Vector2(placementAttacker.position.x, placementAttacker.position.y);
+        if (placementAttacker.attackType == Placement.AttackType.Range) {
+            for (int i = 0; i < placementAttacker.attackRange; i++) {
+                Vector2 newPosition = Vector2.moveDirection(attackerPosition, direction);
+                Placement possibleHitee = placementController.findByPosition(newPosition);
+                if (possibleHitee != null) {
+                    boardController.shootingBullet(attackerPosition, direction, possibleHitee);
+                    placementController.placementList.remove(Vector2.KeyGenerator(newPosition)); // there may be some calculation for hit hitPoint and die condition
+                    return; // if the bullet is keep going, don't break it
+                }
+                attackerPosition = newPosition;
+            }
+            boardController.shootingBullet(attackerPosition, direction, null);
+        } else if (placementAttacker.attackType == Placement.AttackType.Melee) { // melee hitee will fight back
+            Vector2 newPosition = Vector2.moveDirection(attackerPosition, direction);
+            Placement possibleHitee = placementController.findByPosition(newPosition);
+            if (possibleHitee != null) {
+                boardController.shootingBullet(attackerPosition, direction, possibleHitee);
+                placementController.placementList.remove(Vector2.KeyGenerator(newPosition));// there may be some calculation for hit hitPoint and die condition
+                placementController.placementList.remove(Vector2.KeyGenerator(attackerPosition));
+                return; // if the bullet is keep going, don't break it
+            }
+        }
+    }
+    //Hitee meant for a placement hit by the bullet or melee weapon.
 
     private HashMap<String, BorderNode> movablePosition(Vector2 position, int layer) {
         HashMap<String, BorderNode> closestFreePositionList = new HashMap<>();
@@ -62,7 +92,7 @@ public class Game {
         return closestFreePositionList;
     }
 
-    private HashMap<String, BorderNode> explosion(Vector2 position, int layer) {
+    private HashMap<String, BorderNode> exploration(Vector2 position, int layer) {
         HashMap<String, BorderNode> boundary = new HashMap<>();
         int layerCounter = layer;
         boundary = borderInfo(position);
@@ -75,7 +105,7 @@ public class Game {
             boundary.putAll(anotherBoundary);
             layerCounter--;
         }
-        String key = Integer.toString(position.x) + Integer.toString(position.y);
+        String key = Vector2.KeyGenerator(position);
         boundary.remove(key);
         return boundary;
     }
@@ -84,7 +114,7 @@ public class Game {
         HashMap<String, BorderNode> boundary = new HashMap<>();
         for (int i = 0; i < Vector2.DIRECTION_LIST.length; i++) {
             Vector2 newPosition = Vector2.moveDirection(position, Vector2.DIRECTION_LIST[i]);
-            String key = Integer.toString(newPosition.x) + Integer.toString(newPosition.y);
+            String key = Vector2.KeyGenerator(newPosition);
             if (!boardController.positionInBoard(newPosition)) {
                 boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.OutOfBoundary, null));
             } else {

@@ -24,7 +24,7 @@ public class Vector2 {
         this.y = y;
     }
 
-    // this move direction is only for "odd-r" display
+    // this move direction is only for "odd-r" display with pointy orientation
     public static Vector2 moveDirection(Vector2 position, Direction direction) {
         Vector2 newPosition = new Vector2(position.x, position.y);
 
@@ -82,10 +82,8 @@ public class Vector2 {
         return ((pos1.x == pos2.x) && (pos1.y == pos2.y));
     }
 
-    void collision() {
+    public static String KeyGenerator(Vector2 vector2){
+        String key = Integer.toString(vector2.x) + ","+Integer.toString(vector2.y);
+        return key;
     }
-
-    void distance(Vector2 pos1, Vector2 pos2) {
-    }
-
 }

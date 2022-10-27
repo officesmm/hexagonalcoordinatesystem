@@ -16,7 +16,7 @@ public class PlacementController {
     }
 
     public void addingPlacement(Placement placement) {
-        String key = Integer.toString(placement.position.x) + Integer.toString(placement.position.y);
+        String key = Vector2.KeyGenerator(placement.position);
         placementList.put(key, placement);
     }
 
@@ -30,7 +30,7 @@ public class PlacementController {
     }
 
     public Placement findByPosition(Vector2 position) {
-        String key = Integer.toString(position.x) + Integer.toString(position.y);
+        String key = Vector2.KeyGenerator(position);
         return placementList.get(key);
     }
 
@@ -38,7 +38,7 @@ public class PlacementController {
     public void updateByPlacementKey(String key){
         Placement newPlacement = placementList.get(key);
         placementList.remove(key);
-        String newKey = Integer.toString(newPlacement.position.x) + Integer.toString(newPlacement.position.y);
+        String newKey = Vector2.KeyGenerator(newPlacement.position);
         placementList.put(newKey,newPlacement);
     }
 
