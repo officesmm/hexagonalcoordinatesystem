@@ -3,33 +3,25 @@ package org.vict.hexagonal._core;
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.controller.BoardController;
 import org.vict.hexagonal.controller.InputController;
-import org.vict.hexagonal.controller.PlacementController;
 import org.vict.hexagonal.model.coordinate.BorderNode;
 import org.vict.hexagonal.model.playerinfo.Placement;
-
-import test.CREATIONAL;
 
 import java.util.HashMap;
 
 public class Game {
 
     BoardController boardController;
-    PlacementController placementController;
     InputController input;
 
     public void newGame() {
         input = new InputController();
         boardController = new BoardController().createBoard(10, 10);
-        placementController = new PlacementController();
-
-        placementController = CREATIONAL.CREATE_PLACEMENT(placementController);
     }
-
 
     public void start() {
         while (true) {
-            boardController.boardDisplay(placementController.placementList);
-            String selectedPlacementKey = input.requestPlacementKey(placementController.placementList);
+            boardController.boardDisplay();
+            String selectedPlacementKey = input.requestPlacementKey(boardController.getBoard().placementList);
             // Action should be an interface with perform by Commend pattern
             InputController.Action action = input.requestAction();
             if (action == InputController.Action.Attack) {
@@ -42,28 +34,27 @@ public class Game {
 
     void move(String selectedPlacementKey) {
         Vector2.Direction direction = input.requestDirection();
-        Vector2 newPosition = Vector2.moveDirection(placementController.placementList.get(selectedPlacementKey).position, direction);
+        Vector2 newPosition = Vector2.moveDirection(boardController.getBoard().placementList.get(selectedPlacementKey).position, direction);
 
         boardController.moveDisplay(newPosition);
-        if (placementController.placementList.get(Vector2.KeyGenerator(newPosition)) != null) {
+        if (boardController.getBoard().getIPlacement(Vector2.KeyGenerator(newPosition)) != null) {
             System.out.println("Unable to move");
         } else {
-            placementController.placementList.get(selectedPlacementKey).position = newPosition;
-            placementController.updateByPlacementKey(selectedPlacementKey);
+            boardController.getBoard().movePlacement(selectedPlacementKey, newPosition);
         }
     }
 
     void shot(String selectedPlacementKey) {
         Vector2.Direction direction = input.requestDirection();
-        Placement placementAttacker = placementController.placementList.get(selectedPlacementKey);
+        Placement placementAttacker = boardController.getBoard().placementList.get(selectedPlacementKey);
         Vector2 attackerPosition = new Vector2(placementAttacker.position.x, placementAttacker.position.y);
         if (placementAttacker.attackType == Placement.AttackType.Range) {
             for (int i = 0; i < placementAttacker.attackRange; i++) {
                 Vector2 newPosition = Vector2.moveDirection(attackerPosition, direction);
-                Placement possibleHitee = placementController.findPlacementByPosition(newPosition);
+                Placement possibleHitee = boardController.getBoard().findPlacementByPosition(newPosition);
                 if (possibleHitee != null) {
                     boardController.shootingBullet(attackerPosition, direction, possibleHitee);
-                    placementController.placementList.remove(Vector2.KeyGenerator(newPosition)); // there may be some calculation for hit hitPoint and die condition
+                    boardController.getBoard().removingPlacement(Vector2.KeyGenerator(newPosition)); // there may be some calculation for hit hitPoint and die condition
                     return; // if the bullet is keep going, don't break it
                 }
                 attackerPosition = newPosition;
@@ -71,11 +62,11 @@ public class Game {
             boardController.shootingBullet(attackerPosition, direction, null);
         } else if (placementAttacker.attackType == Placement.AttackType.Melee) { // melee hitee will fight back
             Vector2 newPosition = Vector2.moveDirection(attackerPosition, direction);
-            Placement possibleHitee = placementController.findPlacementByPosition(newPosition);
+            Placement possibleHitee = boardController.getBoard().findPlacementByPosition(newPosition);
             if (possibleHitee != null) {
                 boardController.shootingBullet(attackerPosition, direction, possibleHitee);
-                placementController.placementList.remove(Vector2.KeyGenerator(newPosition));// there may be some calculation for hit hitPoint and die condition
-                placementController.placementList.remove(Vector2.KeyGenerator(attackerPosition));
+                boardController.getBoard().removingPlacement(Vector2.KeyGenerator(newPosition));// there may be some calculation for hit hitPoint and die condition
+                boardController.getBoard().removingPlacement(Vector2.KeyGenerator(attackerPosition));
                 return; // if the bullet is keep going, don't break it
             }
         }
@@ -119,7 +110,7 @@ public class Game {
             if (!boardController.positionInBoard(newPosition)) {
                 boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.OutOfBoundary, null));
             } else {
-                Placement positionPlace = placementController.findPlacementByPosition(newPosition);
+                Placement positionPlace = boardController.getBoard().findPlacementByPosition(newPosition);
                 if (positionPlace != null) {
                     boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.Placement, positionPlace));
                 } else {

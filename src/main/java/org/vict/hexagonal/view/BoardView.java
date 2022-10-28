@@ -9,13 +9,13 @@ import java.util.HashMap;
 public class BoardView {
 
     // this function will not be using in real since this function do not show the Placement data
-    public void display(Board board) {
-        for (int i = 0; i < board.height; i++) {
+    public void displayMap(Board board) {
+        for (int i = 0; i < board.getHeight(); i++) {
             if (i % 2 != 0) {
                 System.out.print("   ");
             }
             System.out.print("|");
-            for (int j = 0; j < board.width; j++) {
+            for (int j = 0; j < board.getWidth(); j++) {
                 System.out.print(" " + i + "," + j + " ");
                 System.out.print("|");
             }
@@ -25,14 +25,15 @@ public class BoardView {
 
     // Compare to the Card Module of Side Mover Game, this project navigate top-left corner of this coordinate system is (0,0) whereas Side Mover Game save as bottom-left as (1,1)
     // the loop system changed, the Game. rearrange function changed
-    public void display(Board board, HashMap<String, Placement> boardItem) {
+    public void display(Board board) {
+        HashMap<String, Placement> boardItem = board.placementList;
         boolean flagItemExist = true;
-        for (int loopY = 0; loopY < board.height; loopY++) {
+        for (int loopY = 0; loopY < board.getHeight(); loopY++) {
             if (loopY % 2 != 0) {
                 System.out.print("  ");
             }
             System.out.print("|");
-            for (int loopX = 0; loopX < board.width; loopX++) {
+            for (int loopX = 0; loopX < board.getWidth(); loopX++) {
                 if (boardItem.size() == 0) {
                     System.out.print(" . ");
                 } else {

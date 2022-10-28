@@ -5,19 +5,20 @@ import org.vict.hexagonal.model.other.Board;
 import org.vict.hexagonal.model.playerinfo.Placement;
 import org.vict.hexagonal.view.BoardView;
 
-import java.util.HashMap;
-
 public class BoardController {
+
     private Board board;
     private BoardView boardView;
 
     public BoardController() {
         this.boardView = new BoardView();
     }
-
     public BoardController createBoard(int width, int height) {
         this.board = new Board(width, height);
         return this;
+    }
+    public Board getBoard() {
+        return board;
     }
 
     public boolean positionInBoard(Vector2 position) {
@@ -29,10 +30,9 @@ public class BoardController {
     }
 
     //region Controlling View
-    public void boardDisplay(HashMap<String, Placement> boardItems) {
-        boardView.display(board, boardItems);
+    public void boardDisplay() {
+        boardView.display(board);
     }
-
     public void moveDisplay(Vector2 position) {
         boardView.displayNewPosition(position);
     }
