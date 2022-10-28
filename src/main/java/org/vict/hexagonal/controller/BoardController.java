@@ -1,4 +1,4 @@
-package org.vict.hexagonal._core;
+package org.vict.hexagonal.controller;
 
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.other.Board;
@@ -24,11 +24,17 @@ public class BoardController {
         return board.isInBoard(position.x, position.y);
     }
 
+    public void shootingBullet(Vector2 bulletPosition, Vector2.Direction bulletDirection, Placement hitPlacement) {
+        boardView.shootingBullet(bulletPosition, bulletDirection, hitPlacement);
+    }
+
+    //region Controlling View
     public void boardDisplay(HashMap<String, Placement> boardItems) {
         boardView.display(board, boardItems);
     }
 
-    public void shootingBullet(Vector2 bulletPosition, Vector2.Direction bulletDirection, Placement hitPlacement) {
-        boardView.shootingBullet(bulletPosition, bulletDirection, hitPlacement);
+    public void moveDisplay(Vector2 position) {
+        boardView.displayNewPosition(position);
     }
+    //endregion
 }

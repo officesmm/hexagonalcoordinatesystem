@@ -1,4 +1,4 @@
-package org.vict.hexagonal._core;
+package org.vict.hexagonal.controller;
 
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
@@ -90,6 +90,9 @@ public class InputController {
         }
     }
 
+
+
+    //region Extra Exception
     private class NullDataException extends Throwable {
         public NullDataException() {
             super();
@@ -99,4 +102,5 @@ public class InputController {
             super(message);
         }
     }
+    //endregion
 }

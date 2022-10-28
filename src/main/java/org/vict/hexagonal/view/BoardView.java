@@ -59,6 +59,9 @@ public class BoardView {
         } else {
             System.out.println("A bullet is shooting to the xx direction and hit pp on yy");
         }
+    }
 
+    public void displayNewPosition(Vector2 position){
+        System.out.println("new Position " + position.x + ", " + position.y);
     }
 }

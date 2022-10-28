@@ -1,6 +1,6 @@
 package test;
 
-import org.vict.hexagonal._core.PlacementController;
+import org.vict.hexagonal.controller.PlacementController;
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
 

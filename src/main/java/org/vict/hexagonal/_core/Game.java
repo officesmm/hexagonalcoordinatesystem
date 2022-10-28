@@ -1,10 +1,11 @@
 package org.vict.hexagonal._core;
 
 import org.vict.hexagonal.common.Vector2;
+import org.vict.hexagonal.controller.BoardController;
+import org.vict.hexagonal.controller.InputController;
+import org.vict.hexagonal.controller.PlacementController;
 import org.vict.hexagonal.model.coordinate.BorderNode;
 import org.vict.hexagonal.model.playerinfo.Placement;
-
-import javax.swing.text.View;
 
 import test.CREATIONAL;
 
@@ -43,7 +44,7 @@ public class Game {
         Vector2.Direction direction = input.requestDirection();
         Vector2 newPosition = Vector2.moveDirection(placementController.placementList.get(selectedPlacementKey).position, direction);
 
-        System.out.println("new Position " + newPosition.x + ", " + newPosition.y);
+        boardController.moveDisplay(newPosition);
         if (placementController.placementList.get(Vector2.KeyGenerator(newPosition)) != null) {
             System.out.println("Unable to move");
         } else {
@@ -59,7 +60,7 @@ public class Game {
         if (placementAttacker.attackType == Placement.AttackType.Range) {
             for (int i = 0; i < placementAttacker.attackRange; i++) {
                 Vector2 newPosition = Vector2.moveDirection(attackerPosition, direction);
-                Placement possibleHitee = placementController.findByPosition(newPosition);
+                Placement possibleHitee = placementController.findPlacementByPosition(newPosition);
                 if (possibleHitee != null) {
                     boardController.shootingBullet(attackerPosition, direction, possibleHitee);
                     placementController.placementList.remove(Vector2.KeyGenerator(newPosition)); // there may be some calculation for hit hitPoint and die condition
@@ -70,7 +71,7 @@ public class Game {
             boardController.shootingBullet(attackerPosition, direction, null);
         } else if (placementAttacker.attackType == Placement.AttackType.Melee) { // melee hitee will fight back
             Vector2 newPosition = Vector2.moveDirection(attackerPosition, direction);
-            Placement possibleHitee = placementController.findByPosition(newPosition);
+            Placement possibleHitee = placementController.findPlacementByPosition(newPosition);
             if (possibleHitee != null) {
                 boardController.shootingBullet(attackerPosition, direction, possibleHitee);
                 placementController.placementList.remove(Vector2.KeyGenerator(newPosition));// there may be some calculation for hit hitPoint and die condition
@@ -118,7 +119,7 @@ public class Game {
             if (!boardController.positionInBoard(newPosition)) {
                 boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.OutOfBoundary, null));
             } else {
-                Placement positionPlace = placementController.findByPosition(newPosition);
+                Placement positionPlace = placementController.findPlacementByPosition(newPosition);
                 if (positionPlace != null) {
                     boundary.put(key, new BorderNode(newPosition, Vector2.DIRECTION_LIST[i], BorderNode.BorderInfo.Placement, positionPlace));
                 } else {

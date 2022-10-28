@@ -1,4 +1,4 @@
-package org.vict.hexagonal._core;
+package org.vict.hexagonal.controller;
 
 import org.vict.hexagonal.common.Vector2;
 import org.vict.hexagonal.model.playerinfo.Placement;
@@ -9,7 +9,7 @@ import java.util.List;
 
 public class PlacementController {
 
-    HashMap<String, Placement> placementList;
+    public HashMap<String, Placement> placementList;
 
     public PlacementController() {
         placementList = new HashMap<String, Placement>();
@@ -29,7 +29,7 @@ public class PlacementController {
         return list;
     }
 
-    public Placement findByPosition(Vector2 position) {
+    public Placement findPlacementByPosition(Vector2 position) {
         String key = Vector2.KeyGenerator(position);
         return placementList.get(key);
     }
@@ -42,10 +42,4 @@ public class PlacementController {
         placementList.put(newKey,newPlacement);
     }
 
-//    public void rearrangeAll() {
-//
-//        for (HashMap.Entry<String, Placement> ele : placementList.entrySet()) {
-//
-//        }
-//    }
 }
