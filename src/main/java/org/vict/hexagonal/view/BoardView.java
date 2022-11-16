@@ -56,13 +56,13 @@ public class BoardView {
 
     public void shootingBullet(Vector2 bulletPosition, Vector2.Direction bulletDirection, Placement hitPlacement) {
         if (hitPlacement == null) {
-            System.out.println("A bullet is shooting to the xx direction and nothing hit");
+            System.out.println("A bullet is shooting to the " + bulletDirection + " direction and nothing hit");
         } else {
-            System.out.println("A bullet is shooting to the xx direction and hit pp on yy");
+            System.out.println("A bullet is shooting to the " + bulletDirection + " direction and hit on" + hitPlacement.position.x + "," + hitPlacement.position.y);
         }
     }
 
-    public void displayNewPosition(Vector2 position){
+    public void displayNewPosition(Vector2 position) {
         System.out.println("new Position " + position.x + ", " + position.y);
     }
 }

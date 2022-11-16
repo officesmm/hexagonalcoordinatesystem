@@ -15,7 +15,6 @@ public class BorderNode{
     public Vector2.Direction direction;
     public BorderInfo borderInfo;
     public Placement placement;
-    public boolean traveled = false;
 
     public BorderNode(Vector2 position, Vector2.Direction direction, BorderInfo borderInfo, Placement placement) {
         this.position = position;
@@ -23,5 +22,4 @@ public class BorderNode{
         this.borderInfo = borderInfo;
         this.placement = placement;
     }
-
 }

@@ -71,8 +71,7 @@ public class Game {
             }
         }
     }
-    //Hitee meant for a placement hit by the bullet or melee weapon.
-
+    //Hitee meant for a placement, target, hit by the bullet or melee weapon.
     private HashMap<String, BorderNode> movablePosition(Vector2 position, int layer) {
         HashMap<String, BorderNode> closestFreePositionList = new HashMap<>();
         closestFreePositionList.putAll(borderInfo(position));
